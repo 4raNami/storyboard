@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<!--
+Sprite,Overlay,TopLeft,"SB\px.png",-150,-150
+ S,0,15,,2000
+ C,0,15,,0,0,0
+Sprite,Overlay,TopLeft,"SB\px.png",0,0
+ V,0,15,114071,640,480
+Sprite,Overlay,TopLeft,"SB\px.png",256,416
+ F,0,15,,0.5
+ C,0,15,114071,0,0,0
+ V,0,15,114071,32,8
+ T,HitSoundSoftWhistle,15,114071
+  F,0,0,100,1
+  F,0,100,,0.5
+Sprite,Overlay,TopLeft,"SB\px.png",288,416
+ F,0,15,,0.5
+ C,0,15,114071,0,0,0
+ V,0,15,114071,32,8
+ T,HitSoundNormalWhistle,15,114071,10
+  F,0,0,100,1
+  F,0,100,,0.5
+Sprite,Overlay,TopLeft,"SB\px.png",320,416
+ F,0,15,,0.5
+ C,0,15,114071,0,0,0
+ V,0,15,114071,32,8
+ T,HitSoundNormalFinish,15,114071,100
+  F,0,0,100,1
+  F,0,100,,0.5
+Sprite,Overlay,TopLeft,"SB\px.png",352,416
+ F,0,15,,0.5
+ C,0,15,114071,0,0,0
+ V,0,15,114071,32,8
+ T,HitSoundNormalClap,15,114071,1000
+  F,0,0,100,1
+  F,0,100,,0.5
+-->
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <script>
+      const NAME = "SB\\px.png";
+      const STD = 3;
+      const SUB = Math.floor(2000 / STD);
+      let IN;
+      let OUT;
+      let row;
+      function change(){
+        IN = document.getElementById("input");
+        OUT = document.getElementById("output");
+        
+        OUT.value="";
+        row = IN.value.split('\n');
+        row.forEach(value => {
+          let ele = value.split(/,|:/);
+            var Fi = ((parseInt(ele[0])-64)/128)*32+256;
+            var S2 = parseInt(ele[2]) - SUB;
+            if(ele[3]!=128){
+              OUT.value += 'Sprite,Overlay,TopLeft,"' + NAME + '",' + Fi + ",0" + '\n';
+              OUT.value += " " + "C,0," + S2 + "," + ele[2] + ",0,0,0" + '\n';
+              OUT.value += " " + "MY,0," + S2 + "," + ele[2] + ",0,416" + '\n';
+              OUT.value += " " + "V,0," + S2 + "," + ele[2] + ",32,8" + '\n';
+            }else{
+              var length = Math.floor((parseInt(ele[5]) - parseInt(ele[2])) * 0.208) * STD + 8;
+              console.log(length);
+              var S5 = ele[5] - SUB;
+              OUT.value += 'Sprite,Overlay,BottomLeft,"' + NAME + '",' + Fi + ",0" + '\n';
+              OUT.value += " " + "C,0," + S2 + "," + ",255,0,0" + '\n';
+              OUT.value += " " + "MY,0," + S2 + "," + ele[2] + ",8,424" + '\n';
+              OUT.value += " " + "MY,0," + ele[2] + "," + ele[5] + ",424" + '\n';
+              //OUT.value += " " + "V,0," + S2 + "," + S5 + ",32,8,32," + length + '\n';
+              OUT.value += " " + "V,0," + S2 + "," + ele[2] + ",32," + length + '\n';
+              OUT.value += " " + "V,0," + ele[2] + "," + ele[5] + ",32," + length + ",32,8" + '\n';
+            }
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <h1>osu! mania 作譜ページ</h1>
+    <header>
+      <ol>
+        <li>Osu!mania の<b>[HitObject]</b>の中身を左のテキストボックスにすべてコピペしてください</li>
+        <li>作成ボタンを押すと右のテキストボックスに.osbのコードが出てくるので、<b>[Overlay]</b>にコピペしてください</li>
+        <li>素材を.osuと同じdirectryに入れることで動作するはずです</li>
+      </ol>
+    </header>
+    <div class="cell">
+      <p class="cell" style="padding-left: 10px"> OD = 
+        <select id="OD">
+          <option value="0">0
+          <option value="1">1
+          <option value="2">2
+          <option value="3">3
+          <option value="4">4
+          <option value="5">5
+          <option value="6">6
+          <option value="7">7
+          <option value="8" selected>8
+          <option value="9">9
+          <option value="10">10 
+        </select>
+      </p>
+      <p class="cell">
+        last Offset = 
+        <input type="text" id="offset" value="133466">
+      </p>
+    </div>
+    <textarea id="input" style="width:200px;height:auto"></textarea>
+    <textarea id="output" style="width:360px;height:auto"></textarea><br>
+    <input type="button" onclick="change()" value="作成">
+  </body>
+</html>

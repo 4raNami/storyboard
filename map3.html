@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <script>
+      const SUB = 1200;
+      let IN;
+      let OUT;
+      let row;
+      let big = false;
+      function name(position){
+        if(position == 1|| position == 2){
+          if(big){
+            return "SB\\don2.png";
+          }else{
+            return "SB\\don.png";
+          }
+        }else{
+          if(big){
+            return "SB\\katsu2.png";
+          }else{
+            return "SB\\katsu.png";
+          }
+        }
+      };
+      function change(){
+        IN = document.getElementById("input");
+        OUT = document.getElementById("output");
+        OUT.value = 
+`Sprite,Overlay,TopLeft,"SB\px.png",-150,-150
+ S,0,15,,2000
+ C,0,15,,0,0,0
+Sprite,Overlay,TopLeft,"SB\px.png",0,0
+ V,0,15,114071,640,480
+Sprite,Overlay,TopLeft,"SB\px.png",64,192
+ V,0,15,,512,64
+ C,0,15,114071,110,110,110
+Sprite,Overlay,Centre,"SB\circle.png",96,224
+ C,0,15,,200,200,200
+ S,0,15,114071,0.5
+Sprite,Overlay,Centre,"SB\circle.png",96,224
+ C,0,15,,150,150,150
+ S,0,15,114071,0.25` + '\n';
+        var PreOffset1 = -10;
+        var PreOffset2 = -10;
+        var PrePosition = -10;
+        row = IN.value.split('\n');
+        //row.push();
+        row.forEach(value => {
+          let ele = value.split(/,|:/);
+          //console.log(ele);
+            var position = (parseInt(ele[0])-64)/128; // 0 ~ 3
+            var NowOffset1 = parseInt(ele[2]) - SUB; // 前のオフセット
+            var NowOffset2 = parseInt(ele[2]); // 今のオフセット
+            if(PrePosition != -10){
+              if(PreOffset2 == NowOffset2 && PrePosition%2 != position%2){
+                big = true;
+                OUT.value += 'Sprite,Overlay,Centre,"' + name(position) + '",96,224' + '\n';
+                OUT.value += " " + "S,0," + NowOffset1 + "," + NowOffset2 + ",0.8" + '\n';
+                OUT.value += " " + "MX,0," + NowOffset1 + "," + NowOffset2 + ",576,96" + '\n';
+              }else if(big){
+                big = false;
+              }
+              else{
+                OUT.value += 'Sprite,Overlay,Centre,"' + name(PrePosition) + '",96,224' + '\n';
+                OUT.value += " " + "S,0," + PreOffset1 + "," + PreOffset2 + ",0.6" + '\n';
+                OUT.value += " " + "MX,0," + PreOffset1 + "," + PreOffset2 + ",576,96" + '\n';
+              }
+            }
+            PreOffset1 = NowOffset1;
+            PreOffset2 = NowOffset2;
+            PrePosition = position;
+        });
+      }
+    </script>
+  </head>
+  <h1>太鼓の達人っぽいSB</h1>
+  <header>
+    <ol>
+      <li>Osu!mania の<b>[HitObject]</b>の中身を左のテキストボックスにすべてコピペしてください</li>
+      <li>作成ボタンを押すと右のテキストボックスに.osbのコードが出てくるので、<b>[Overlay]</b>にコピペしてください</li>
+      <li>素材を.osuと同じdirectryに入れることで動作するはずです</li>
+    </ol>
+  </header>
+  <body>
+    <textarea id="input" style="width:200px;height:auto"></textarea>
+    <textarea id="output" style="width:360px;height:auto"></textarea><br>
+    <input type="button" onclick="change()" value="作成">
+  </body>
+</html>

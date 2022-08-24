@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <script>
+      const NAME = "SB\\hole.png";
+      let IN;
+      let OUT;
+      let sub;
+      let row;
+      function change(){
+        sub = document.getElementById("sub").value;
+        IN = document.getElementById("input");
+        OUT = document.getElementById("output");
+        OUT.value="";
+        row = IN.value.split('\n');
+        row.forEach(value => {
+          let ele = value.split(",");
+            var Mi = ((parseInt(ele[0])-64)/128+1)*127+11;
+            var Si = parseInt(ele[2]) - sub;
+            OUT.value += 'Sprite,Overlay,Centre,"'+ NAME +'",320,240' + '\n';
+            OUT.value += " " + "S,0," + Si + "," + ele[2] + ",4,1" + '\n';
+            OUT.value += " " + "M,0,"+ ele[2] +",,"+ Mi +",74" + '\n';
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Flagman SB 枠付けページ</h1>
+    <header>
+      <ol>
+        <li>Osu!mania の<b>[HitObject]</b>の中身を左のテキストボックスにすべてコピペしてください</li>
+        <li>作成ボタンを押すと右のテキストボックスに.osbのコードが出てくるので、<b>[Overlay]</b>にコピペしてください</li>
+        <li>素材を.osuと同じdirectryに入れることで動作するはずです</li>
+      </ol>
+    </header>
+    <p class="cell">Previous(どれくらい前から表示するか):<input type="text" id="sub" value="1000"></p>
+    <section>
+      <textarea id="input" style="width:200px;height:auto"></textarea>
+      <textarea id="output" style="width:360px;height:auto"></textarea>
+    </section><br>
+    <input type="button" onclick="change()" value="作成">
+  </body>
+</html>
